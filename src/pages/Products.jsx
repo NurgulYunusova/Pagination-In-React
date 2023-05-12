@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import {
   Form,
   FormGroup,
@@ -16,7 +16,7 @@ function Products() {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(4);
-
+  const navigate = useNavigate();
   let arr = [];
 
   let getData = () => {
@@ -28,11 +28,15 @@ function Products() {
 
   useEffect(() => {
     getData();
+    navigate(`?page=${page}`);
   }, [page, perPage]);
 
   for (let i = 1; i <= products.total_pages; i++) {
     arr.push(i);
   }
+  let changePage = (n) => {
+    setPage(n);
+  };
 
   return (
     <>
@@ -71,7 +75,7 @@ function Products() {
           {arr &&
             arr.map((num) => (
               <PaginationItem key={num}>
-                <PaginationLink href="#" onClick={() => setPage(num)}>
+                <PaginationLink onClick={() => changePage(num)}>
                   {num}
                 </PaginationLink>
               </PaginationItem>
